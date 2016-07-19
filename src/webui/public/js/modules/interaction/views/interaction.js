@@ -268,7 +268,9 @@ define(['application', "marionette", './message', "tpl!./templates/interaction.t
                 if (this.speechEnabled) {
                     if (msg.data == 'start') {
                         this.speechPaused = true;
-                        this.disableSpeech();
+                    } else if (msg.data == 'stop') {
+                        this.speechRecognition.abort()
+                        console.log('abort');
                     }
                 } else if ((msg.data != 'start') && this.speechPaused) {
                     this.enableSpeech();
