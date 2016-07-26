@@ -17,3 +17,7 @@ Description: Hanson Environment for Application Development
     - Behavior tree, for scripting performaces.
     - Motor control ROS nodes, for controlling the physical robot.
  
+Package: head-deps
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: HEAD dependencies
