@@ -8,7 +8,7 @@ Homepage: https://github.com/hansonrobotics/HEAD
 
 Package: head
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ros-indigo-cv-bridge (>= 1.11.12-0), ros-indigo-rosconsole (>= 1.11.16-0), ros-indigo-roscpp-serialization (>= 0.5.6-0), ros-indigo-image-transport (>= 1.11.10-0), ros-indigo-roscpp (>= 1.11.16-0), ${shlibs:Depends}, ${misc:Depends}
 Description: Hanson Environment for Application Development
   This repository contains the integrated code for controlling and interacting with many Hanson Robotics robot heads. It includes the full performance pipeline and infrastructure:
     - Perception, via ROS webcam nodes.
