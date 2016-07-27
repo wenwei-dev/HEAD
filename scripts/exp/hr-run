@@ -63,5 +63,4 @@ tmux new-window -n 'blender' "cd $BASEDIR/blender_api && blender -y Sophia.blend
 tmux new-window -n 'chat_server' "cd $BASEDIR/lib/chatbot/ && python run_server.py; $SHELL"
 tmux new-window -n 'marytts' "/opt/hansonrobotics/marytts-5.1.2/bin/marytts-server; $SHELL"
 tmux new-window -n 'btree' "export ROS_NAMESPACE=$NAME; rosrun behavior main.py; $SHELL"
-tmux new-window -n 'bash' "cd $BASEDIR/scripts; $SHELL"
 tmux attach;
