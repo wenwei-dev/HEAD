@@ -31,7 +31,8 @@ done
 BASEDIR=/opt/hansonrobotics
 source $BASEDIR/setup.bash
 export NAME=robot
-export ROS_PYTHON_LOG_CONFIG_FILE="$BASEDIR/scripts/python_logging.conf"
+export ROS_PYTHON_LOG_CONFIG_FILE="$BASEDIR/etc/python_logging.conf"
+export ROS_LOG_DIR="$HOME/.hr/log"
 export ROSCONSOLE_FORMAT='[${logger}][${severity}] [${time}]: ${message}'
 export LAUNCH_DIR="$BASEDIR/share/robots_config/launch/"
 export HR_CHARACTER_PATH=$BASEDIR/share/chatbot/scripts/characters/
