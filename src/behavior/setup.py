@@ -5,6 +5,6 @@ from distutils.core import setup
 
 setup(
     version='0.0.4',
-    packages=['behavior'],
+    packages=['owyl', 'behavior'],
     package_dir={'': 'src'}
 )

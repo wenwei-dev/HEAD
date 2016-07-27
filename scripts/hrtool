@@ -205,13 +205,6 @@ install_other_deps() {
     $SUDO apt-get -y install expect
 
     install_manyears_deps
-
-    # For behavoir tree
-    wget_cache https://raw.githubusercontent.com/hansonrobotics/binary_dependency/master/owyl-master.zip
-    unzip -o ${HR_CACHE}/owyl-master.zip -d /tmp
-    cd /tmp/owyl-master
-    $SUDO python setup.py install
-    $SUDO rm -r /tmp/owyl-master
 }
 
 install_manyears_deps() {

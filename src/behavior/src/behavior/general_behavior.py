@@ -376,8 +376,8 @@ class Tree():
         self.tree = self.build_tree()
         time.sleep(0.1)
 
-        log_filename = os.path.join(os.path.abspath(
-                os.path.dirname(__file__)), "../bhlog.csv")
+        log_filename = os.path.join(
+            os.path.expanduser("~/.hr/log/bhlog.csv"))
         self.log_file = open(log_filename, 'wb')
         self.log_file.write('Action,Timestamp,Event\n')
         try:
