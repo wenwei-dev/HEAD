@@ -8,7 +8,7 @@ Homepage: https://github.com/hansonrobotics/HEAD
 
 Package: head
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, head-deps (>= 0.1.0-alpha)
 Description: Hanson Environment for Application Development
   This repository contains the integrated code for controlling and interacting with many Hanson Robotics robot heads. It includes the full performance pipeline and infrastructure:
     - Perception, via ROS webcam nodes.
