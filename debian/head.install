@@ -1,4 +1,5 @@
 install/* opt/hansonrobotics
 install/.catkin opt/hansonrobotics
 scripts opt/hansonrobotics
+scripts/exp/hr-run /usr/bin
 src/blender_api opt/hansonrobotics
