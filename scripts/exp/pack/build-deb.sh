@@ -39,7 +39,7 @@ build_deb_package() {
     cd $workspace
 
     install_target=$workspace/install/lib/python2.7/dist-packages/
-    deps_target=$workspace/depends
+    deps_prefix=$workspace/depends
 cat <<EOF > _build.sh
 #!/usr/bin/env bash
 set -e
@@ -52,13 +52,7 @@ pip3 install -t $install_target $workspace/src/blender_api_msgs --upgrade --no-d
 EOF
 
 cat <<EOF > _build_deps.sh
-mkdir -p $deps_target
-pip2 install -t $deps_target/lib/python2.7/dist-packages Flask==0.11.1, pinyin==0.2.5, EasyProcess==0.1.9, psutil==1.2.1, pyparsing==2.1.5
-
-if [[ ! -f /tmp/marytts-5.1.2.zip ]]; then
-  wget https://github.com/marytts/marytts/releases/download/v5.1.2/marytts-5.1.2.zip -O /tmp/marytts-5.1.2.zip
-fi
-unzip -od $deps_target /tmp/marytts-5.1.2.zip
+bash $workspace/scripts/exp/pack/_build_deps.sh $deps_prefix
 EOF
 
 cat <<EOF > _clean.sh
