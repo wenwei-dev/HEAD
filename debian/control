@@ -38,3 +38,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     python-pyglet (>= 1.1.4.dfsg-2build1),
     default-jre (>= 2:1.7-51),
 Description: HEAD dependencies
+
+Package: head-data
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+Description: HEAD data
