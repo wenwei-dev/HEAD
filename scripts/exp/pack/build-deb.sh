@@ -40,10 +40,13 @@ build_deb_package() {
 
     install_target=$workspace/install/lib/python2.7/dist-packages/
     deps_prefix=$workspace/depends
+    touch ~/.hr/build_env.sh
+
 cat <<EOF > _build.sh
 #!/usr/bin/env bash
 set -e
 source /opt/ros/indigo/setup.bash
+source ~/.hr/build_env.sh
 catkin init
 catkin build -c -j$(nproc) --make-args install
 pip2 install -t $install_target $workspace/src/hardware/pololu-motors --upgrade --no-deps
