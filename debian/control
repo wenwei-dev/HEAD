@@ -35,5 +35,6 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     ros-indigo-robot-state-publisher (>= 1.11.2-0trusty-20160628-114357-0700),
     ros-indigo-joint-state-publisher (>= 1.11.11-0trusty-20160627-235104-0700),
     ros-indigo-rviz (>= 1.11.10-0trusty-20151130-1428-+0000),
-    python-pyglet (>= 1.1.4.dfsg-2build1)
+    python-pyglet (>= 1.1.4.dfsg-2build1),
+    default-jre (>= 2:1.7-51),
 Description: HEAD dependencies
