@@ -32,10 +32,10 @@ install_marytts_deps() {
 }
 
 install_manyears_deps() {
-    wget_cache https://github.com/hansonrobotics/manyears-C/archive/v1.0.0.tar.gz manyears.tar.gz
-    local manyears_dir=/tmp/manyears-C-1.0.0
+    wget_cache https://github.com/hansonrobotics/manyears-C/archive/v1.0.1.tar.gz manyears.v1.0.1.tar.gz
+    local manyears_dir=/tmp/manyears-C-1.0.1
     rm -rf ${manyears_dir}
-    tar zxf $HR_CACHE/manyears.tar.gz -C /tmp
+    tar zxf $HR_CACHE/manyears.v1.0.1.tar.gz -C /tmp
     cd ${manyears_dir} && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=${MANYEARSLIB_PREFIX} .. && make && make install
     rm -rf ${manyears_dir}
 }
