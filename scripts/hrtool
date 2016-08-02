@@ -30,7 +30,7 @@ DLIB_VERSION=19.0
 
 export DLIB_PATH=$DLIB_DIR/dlib-${DLIB_VERSION}
 # Needed for compiling
-export MANYEARSLIB_PREFIX=$HR_PREFIX/manyears-C-1.0.0
+export MANYEARSLIB_PREFIX=$HR_PREFIX/manyears
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CPPMT_DIR:$EMOTIME_DIR/build/src
 export LIBRARY_PATH=$LIBRARY_PATH:$CPPMT_DIR:$EMOTIME_DIR/build/src
 include_dirs=($EMOTIME_DIR/src/{facedetector,utils,gaborbank,detector,training})
@@ -209,8 +209,11 @@ install_other_deps() {
 
 install_manyears_deps() {
     wget_cache https://github.com/hansonrobotics/manyears-C/archive/v1.0.0.tar.gz manyears.tar.gz
-    tar zxf $HR_CACHE/manyears.tar.gz -C $HR_PREFIX
-    mkdir -p $MANYEARSLIB_PREFIX/build && cd $MANYEARSLIB_PREFIX/build && cmake .. && make
+    local manyears_dir=/tmp/manyears-C-1.0.0
+    rm -rf ${manyears_dir}
+    tar zxf $HR_CACHE/manyears.tar.gz -C /tmp
+    cd ${manyears_dir} && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=${MANYEARSLIB_PREFIX} .. && make && make install
+    rm -rf ${manyears_dir}
 }
 
 install_test_deps() {
