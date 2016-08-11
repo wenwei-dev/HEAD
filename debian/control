@@ -37,6 +37,12 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     ros-indigo-rviz (>= 1.11.10-0trusty-20151130-1428-+0000),
     python-pyglet (>= 1.1.4.dfsg-2build1),
     default-jre (>= 2:1.7-51),
+# Dependencies for openface
+    python-skimage (>= 0.9.3-4build1),
+    python-numpy (>= 1:1.8.2-0ubuntu0.1),
+    python-scipy (>= 0.13.3-1build1),
+    python-pandas (>= 0.13.1-2ubuntu2),
+    python-sklearn (>= 0.14.1-2),
 Description: HEAD dependencies
 
 Package: head-data
