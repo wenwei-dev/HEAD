@@ -3,3 +3,7 @@ pinyin==0.2.5
 EasyProcess==0.1.9
 psutil==1.2.1
 pyparsing==2.1.5
+
+# Tkinter error other wise.
+Pillow==3.2.0
+imgurpython==1.1.7
