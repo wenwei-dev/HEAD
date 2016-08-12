@@ -24,6 +24,8 @@ install_torch() {
 
     # TODO
     #bash install-deps
+    # sudo apt-get update
+    # sudo apt-get install -y build-essential gcc g++ curl cmake libreadline-dev git-core libqt4-dev libjpeg-dev libpng-dev ncurses-dev imagemagick libzmq3-dev gfortran unzip gnuplot gnuplot-x11 libopenblas-dev liblapack-dev libqt4-core libqt4-gui
 
     mkdir -p $TORCH_DIR
     cd /tmp/torch

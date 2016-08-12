@@ -16,17 +16,9 @@ fi
 
 source ${BASEDIR}/common.sh
 
-set_build_env() {
-cat <<EOF >$HR_BUILD_ENVFILE
-export MANYEARSLIB_PREFIX=${MANYEARSLIB_PREFIX}
-export DLIB_PATH=$DLIB_DIR/dlib-${DLIB_VERSION}
-EOF
-}
-
 mkdir -p $HR_CACHE
 mkdir -p $HR_PREFIX
 
-set_build_env
 pip2 install -t $HR_PREFIX/lib/python2.7/dist-packages -r $BASEDIR/requirements
 bash ${BASEDIR}/install_marytts.sh
 bash ${BASEDIR}/install_manyears_deps.sh
