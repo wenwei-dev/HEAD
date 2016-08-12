@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
 source $(dirname $(readlink -f ${BASH_SOURCE[0]}))/common.sh
+set -e
 
 install_dlib() {
-    wget_cache http://dlib.net/files/dlib-${DLIB_VERSION}.tar.bz2
+    wget_cache http://dlib.net/files/dlib-${DLIB_VERSION}.tar.bz2 dlib.tar.bz2
+    tar jxf ${HR_CACHE}/dlib.tar.bz2 -C /tmp
     mkdir -p $DLIB_PATH
-    tar -xf $HR_CACHE/dlib-${DLIB_VERSION}.tar.bz2 -C $DLIB_DIR
-    info "Building dlib"
-    cd $DLIB_PATH && python setup.py build
+    mkdir -p $DLIB_PATH/lib/python2.7/site-packages
+    mkdir -p /tmp/dlib-${DLIB_VERSION}/build
+    cd /tmp/dlib-${DLIB_VERSION}/build && cmake -DCMAKE_INSTALL_PREFIX=${DLIB_PATH} .. && make -j$(nproc) && make install
+    cd /tmp/dlib-${DLIB_VERSION} && PYTHONPATH=$PYTHONPATH:$DLIB_PATH/lib/python2.7/site-packages python setup.py install --prefix=$DLIB_PATH
+    rm -r /tmp/dlib-${DLIB_VERSION}
 }
 
 install_torch() {
