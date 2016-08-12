@@ -4,14 +4,17 @@ source $(dirname $(readlink -f ${BASH_SOURCE[0]}))/common.sh
 set -e
 
 install_dlib() {
-    wget_cache http://dlib.net/files/dlib-${DLIB_VERSION}.tar.bz2 dlib.tar.bz2
-    tar jxf ${HR_CACHE}/dlib.tar.bz2 -C /tmp
+    local dlib_version=19.0
+    wget_cache https://raw.githubusercontent.com/hansonrobotics/binary_dependency/master/src/dlib-${dlib_version}.tar.bz2
+    # original link
+    # wget_cache http://dlib.net/files/dlib-${dlib_version}.tar.bz2 dlib-${dlib_version}.tar.bz2
+    tar jxf ${HR_CACHE}/dlib-${dlib_version}.tar.bz2 -C /tmp
     mkdir -p $DLIB_PATH
     mkdir -p $DLIB_PATH/lib/python2.7/site-packages
-    mkdir -p /tmp/dlib-${DLIB_VERSION}/build
-    cd /tmp/dlib-${DLIB_VERSION}/build && cmake -DCMAKE_INSTALL_PREFIX=${DLIB_PATH} .. && make -j$(nproc) && make install
-    cd /tmp/dlib-${DLIB_VERSION} && PYTHONPATH=$PYTHONPATH:$DLIB_PATH/lib/python2.7/site-packages python setup.py install --prefix=$DLIB_PATH
-    rm -r /tmp/dlib-${DLIB_VERSION}
+    mkdir -p /tmp/dlib-${dlib_version}/build
+    cd /tmp/dlib-${dlib_version}/build && cmake -DCMAKE_INSTALL_PREFIX=${DLIB_PATH} .. && make -j$(nproc) && make install
+    cd /tmp/dlib-${dlib_version} && PYTHONPATH=$PYTHONPATH:$DLIB_PATH/lib/python2.7/site-packages python setup.py install --prefix=$DLIB_PATH
+    rm -r /tmp/dlib-${dlib_version}
 }
 
 install_torch() {
