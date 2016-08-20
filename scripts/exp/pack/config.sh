@@ -1,10 +1,13 @@
 HR_CACHE=~/.hr/cache
 HR_BUILD_ENVFILE=~/.hr/build_env.sh
+HR_WORKSPACE=~/workspace/hansonrobotics
+HR_VERSION=0.1.0
 
 cat <<EOF >$HR_BUILD_ENVFILE
+export HR_CACHE=${HR_CACHE}
 export MANYEARSLIB_PREFIX=${HR_PREFIX}/manyears
 export VISION_TOOL_PREFIX=${HR_PREFIX}/vision
-export DLIB_PATH=${VISION_TOOL_PREFIX}/dlib
+export DLIB_PATH=/tmp/dlib
 export TORCH_DIR=$VISION_TOOL_PREFIX/torch
 export OPENFACE_DIR=$VISION_TOOL_PREFIX/openface
 export EMOTIME_DIR=$VISION_TOOL_PREFIX/emotime

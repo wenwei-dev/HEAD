@@ -3,24 +3,9 @@
 set -e
 
 BASEDIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
-$BASEDIR/../../hrtool -r set_env
-source $BASEDIR/../../env.sh
+source $BASEDIR/common.sh
 
 PROJECT=${PROJECT:-HEAD}
-
-COLOR_INFO='\033[32m'
-COLOR_WARN='\033[33m'
-COLOR_ERROR='\033[31m'
-COLOR_RESET='\033[0m'
-info() {
-    printf "${COLOR_INFO}[INFO] ${1}${COLOR_RESET}\n"
-}
-warn() {
-    printf "${COLOR_WARN}[WARN] ${1}${COLOR_RESET}\n"
-}
-error() {
-    printf "${COLOR_ERROR}[ERROR] ${1}${COLOR_RESET}\n"
-}
 
 build_deb_package() {
     info "Building DEB package"
