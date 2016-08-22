@@ -25,6 +25,7 @@ build_deb_package() {
 
     install_target=$workspace/install/lib/python2.7/dist-packages/
     deps_prefix=$workspace/depends
+    data_prefix=$workspace/data
     touch ~/.hr/build_env.sh
 
 cat <<EOF > _build.sh
@@ -41,6 +42,10 @@ EOF
 
 cat <<EOF > _build_deps.sh
 bash $workspace/scripts/exp/pack/_build_deps.sh $deps_prefix
+EOF
+
+cat <<EOF > _build_data.sh
+bash $workspace/scripts/exp/pack/_build_data.sh $data_prefix
 EOF
 
 cat <<EOF > _clean.sh

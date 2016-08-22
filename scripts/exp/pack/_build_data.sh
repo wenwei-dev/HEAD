@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
 
-source $(dirname $(readlink -f ${BASH_SOURCE[0]}))/common.sh
 set -e
 
+if [[ $# != 1 ]];then
+    echo "Usage: bash $0 <PREFIX>"
+    exit 1
+fi
+
+BASEDIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+HR_PREFIX=${1}
+
+if [[ ! "$HR_PREFIX" = /* ]]; then
+    HR_PREFIX=$(pwd)/$HR_PREFIX
+fi
+
+source ${BASEDIR}/common.sh
+
+mkdir -p $HR_CACHE
+mkdir -p $HR_PREFIX
+
 install_openface_data() {
-    local data_dir=$HR_PREFIX/data/openface/models
+    local data_dir=$HR_PREFIX/openface/models
 
     mkdir -p $data_dir/dlib
     wget_cache http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
@@ -23,7 +39,7 @@ install_openface_data() {
 }
 
 install_opencog_data() {
-    local data_dir=$HR_PREFIX/data/opencog
+    local data_dir=$HR_PREFIX/opencog
     mkdir -p $data_dir
     wget_cache https://github.com/opencog/test-datasets/releases/download/current/aiml-current.tar.gz
     cp ${HR_CACHE}/aiml-current.tar.gz $data_dir

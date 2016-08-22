@@ -23,4 +23,3 @@ pip2 install -t $HR_PREFIX/lib/python2.7/dist-packages -r $BASEDIR/requirements
 bash ${BASEDIR}/install_marytts.sh
 bash ${BASEDIR}/install_manyears_deps.sh
 bash ${BASEDIR}/install_vision_deps.sh
-bash ${BASEDIR}/install_data.sh
