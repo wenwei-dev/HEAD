@@ -213,6 +213,7 @@ install_manyears_deps() {
     rm -rf ${manyears_dir}
     tar zxf $HR_CACHE/manyears.tar.gz -C /tmp
     cd ${manyears_dir} && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=${MANYEARSLIB_PREFIX} .. && make && make install
+    cd $HR_WORKSPACE
     rm -rf ${manyears_dir}
 }
 
