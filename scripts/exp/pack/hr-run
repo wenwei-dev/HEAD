@@ -28,7 +28,7 @@ while [[ $# > 0 ]]; do
     esac
 done
 
-BASEDIR=/opt/hansonrobotics
+BASEDIR=/opt/hansonrobotics/install
 source $BASEDIR/setup.bash
 export NAME=robot
 export ROS_PYTHON_LOG_CONFIG_FILE="$BASEDIR/etc/python_logging.conf"
@@ -61,6 +61,6 @@ python $BASEDIR/share/webui/app/__init__.py -p 8000; $SHELL"
 
 tmux new-window -n 'blender' "cd $BASEDIR/blender_api && blender -y Sophia.blend -P autostart.py; $SHELL"
 tmux new-window -n 'chat_server' "cd $BASEDIR/lib/chatbot/ && python run_server.py; $SHELL"
-tmux new-window -n 'marytts' "/opt/hansonrobotics/marytts-5.1.2/bin/marytts-server; $SHELL"
+tmux new-window -n 'marytts' "$BASEDIR/marytts/bin/marytts-server; $SHELL"
 tmux new-window -n 'btree' "export ROS_NAMESPACE=$NAME; rosrun behavior main.py; $SHELL"
 tmux attach;
