@@ -38,6 +38,10 @@ md5str() {
 
 checkmd5() {
     local FNAME=$1
+    if [[ ! -f $FNAME ]]; then
+        error "$FNAME is not a file"
+        return 1
+    fi
     local EXPECTED=$2
     local ACTUAL=$(md5str "$FNAME")
     if [ $EXPECTED = $ACTUAL ]; then
@@ -47,6 +51,7 @@ checkmd5() {
         error "$FNAME md5sum did not match."
         error "Expected: $EXPECTED"
         error "Actual: $ACTUAL"
+        rm $FNAME && warn "$FNAME is removed"
         return 1
     fi
 }
