@@ -196,7 +196,14 @@ install_other_deps() {
     wget_cache https://github.com/marytts/marytts/releases/download/v5.1.2/marytts-5.1.2.zip
     unzip -od ~/.hr/tts/marytts ${HR_CACHE}/marytts-5.1.2.zip
 
+    # Swig for iflytek SDK
+    $SUDO apt-get -y install swig
+
     $SUDO pip2 install pinyin==0.2.5
+
+    # Speech recognition
+    $SUDO apt-get -y install python-pyaudio
+    $SUDO pip2 install SpeechRecognition
 
     # For rospy to run with python3
     $SUDO apt-get -y install python3-yaml
