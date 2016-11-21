@@ -71,7 +71,8 @@ class NumbTTS(TTSBase):
     def _tts(self, text):
         fname = '{}.wav'.format(os.path.join(self.output_dir, text.strip()))
         if os.path.isfile(fname):
-            shutil.copy(fname, self.wavout)
+            if fname != self.wavout:
+                shutil.copy(fname, self.wavout)
             tts_data = TTSData()
             tts_data.wavout = self.wavout
             try:
