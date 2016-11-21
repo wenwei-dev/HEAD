@@ -221,6 +221,7 @@ class ChineseTTSBase(OnlineTTS):
 
     def _tts(self, text):
         tts_data = super(ChineseTTSBase, self)._tts(text)
-        tts_data.phonemes = self.get_phonemes(text)
+        tts_data.phonemes = [
+            {'name': phoneme[0], 'start': phoneme[1], 'end': phoneme[2]}
+                for phoneme in audio2phoneme(fname)]
         return tts_data
-
