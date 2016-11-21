@@ -27,9 +27,11 @@ CPPMT_DIR=$VISION_TOOL_PREFIX/CppMT
 EMOTIME_DIR=$VISION_TOOL_PREFIX/emotime
 CLANDMARK_DIR=$VISION_TOOL_PREFIX/clandmark
 MARKY_MARKOV_DIR=$HR_PREFIX/marky_markov
+HARK_DIR=$HR_PREFIX/hark
 DLIB_VERSION=19.0
 
 export PKG_CONFIG_PATH=${HR_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}
+export PATH=${HR_PREFIX}/bin:$PATH
 export DLIB_PATH=$DLIB_DIR/dlib-${DLIB_VERSION}
 
 # Needed for compiling
@@ -211,6 +213,7 @@ install_relex_deps() {
 }
 
 install_pocketsphinx() {
+    info "Installing PocketSphinx"
     $SUDO apt-get ${APT_GET_OPTS} install bison automake
     wget_cache https://github.com/hansonrobotics/sphinxbase/archive/v1.0.0.tar.gz sphinxbase-1.0.0.tar.gz
     checkmd5 ${HR_CACHE}/sphinxbase-1.0.0.tar.gz df69f72b19abd943cfc4b51ec30a3b29
@@ -226,6 +229,73 @@ install_pocketsphinx() {
     cd /tmp/pocketsphinx-1.0.0
     ./autogen.sh && ./configure --prefix=$HR_PREFIX && make && make install
     rm -r /tmp/pocketsphinx-1.0.0
+    info "Installing PocketSphinx is done"
+}
+
+install_hark() {
+    info "Installing HARK"
+    # Reference http://hark.jp/wiki.cgi?page=HARK+Installation+Instructions#p3
+    $SUDO bash -c 'echo -e "deb http://winnie.kuis.kyoto-u.ac.jp/HARK/harkrepos trusty non-free\ndeb-src http://winnie.kuis.kyoto-u.ac.jp/HARK/harkrepos trusty non-free" > /etc/apt/sources.list.d/hark.list'
+    wget -q -O - http://winnie.kuis.kyoto-u.ac.jp/HARK/harkrepos/public.gpg | sudo apt-key add -
+    $SUDO apt-get ${APT_GET_OPTS} update
+    $SUDO apt-get ${APT_GET_OPTS} install harkfd hark-designer
+    $SUDO apt-get ${APT_GET_OPTS} install julius-4.2.3-hark-plugin
+    $SUDO apt-get ${APT_GET_OPTS} install harktool4
+    $SUDO apt-get ${APT_GET_OPTS} install harktool5
+
+    (dpkg -l | grep rasp) || $SUDO apt-get ${APT_GET_OPTS} install librasp-netapi
+    info "Installing HARK is done"
+}
+
+install_hark_from_src() {
+    # Reference: http://hark.jp/wiki.cgi?page=HARK+Installation+Instructions#p4
+    export PKG_CONFIG_PATH=${HARK_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
+    export PATH=${HARK_DIR}/bin:$PATH
+    $SUDO apt-get ${APT_GET_OPTS} install libtool libgnomeui-dev libxml++2.6-dev libxml2-dev libasound2-dev libboost-dev libboost-regex-dev libboost-thread-dev libboost-program-options-dev libboost-filesystem-dev libsndfile1-dev
+    $SUDO apt-get ${APT_GET_OPTS} install libspeexdsp-dev
+
+    if [[ ! -d $HARK_DIR ]]; then
+        mkdir -p $HARK_DIR
+    fi
+
+    wget_cache http://www.hark.jp/src/2.2.0/flowdesigner-0.9.1-hark_2.2.0.tar.gz
+    checkmd5 ${HR_CACHE}/flowdesigner-0.9.1-hark_2.2.0.tar.gz 20db336dc8da9f86248cae1eeb25cabd
+    tar zxvf ${HR_CACHE}/flowdesigner-0.9.1-hark_2.2.0.tar.gz -C /tmp
+    cd /tmp/flowdesigner-0.9.1-hark/
+    ./configure --prefix=$HARK_DIR && make && make install
+    rm -r /tmp/flowdesigner-0.9.1-hark/
+
+    wget_cache http://www.hark.jp/src/2.2.0/libharkio3_2.2.0.tar.gz
+    checkmd5 ${HR_CACHE}/libharkio3_2.2.0.tar.gz c2152ab6938d9e6f6cbdaeecc19cc6a5
+    tar zxvf ${HR_CACHE}/libharkio3_2.2.0.tar.gz -C /tmp
+    cd /tmp/libharkio3
+    $SUDO sh bootstrap.sh
+    mkdir -p build
+    cd build/
+    cmake -DCMAKE_INSTALL_PREFIX=${HARK_DIR} ..
+    make
+    make install
+    rm -r /tmp/libharkio3/
+
+    wget_cache http://www.hark.jp/src/2.2.0/libharkio_2.2.0.tar.gz
+    checkmd5 ${HR_CACHE}/libharkio_2.2.0.tar.gz eb8eeb4a8f77ec351c40277b73ffe10a
+    tar zxvf ${HR_CACHE}/libharkio_2.2.0.tar.gz -C /tmp
+    cd /tmp/libharkio
+    ./configure --prefix=$HARK_DIR && make && make install
+    rm -r /tmp/libharkio
+
+    wget_cache http://www.hark.jp/src/2.2.0/libharknetapi_2.2.0.tar.gz
+    checkmd5 ${HR_CACHE}/libharknetapi_2.2.0.tar.gz fd0e6653b3b38827e37bd916a496f16a
+    tar zxvf ${HR_CACHE}/libharknetapi_2.2.0.tar.gz -C ${HARK_DIR}
+    cd ${HARK_DIR}/libharknetapi
+    make static
+
+    wget_cache http://www.hark.jp/src/2.2.0/hark-fd_2.2.0.tar.gz
+    checkmd5 ${HR_CACHE}/hark-fd_2.2.0.tar.gz f57726ea03f120be67273f2bdd049ec4
+    tar zxvf ${HR_CACHE}/hark-fd_2.2.0.tar.gz -C /tmp
+    cd /tmp/hark-fd
+    ./configure --prefix=$HARK_DIR --enable-harknetapi --with-harknetapi-inc=${HARK_DIR}/libharknetapi --with-harknetapi-lib=${HARK_DIR}/libharknetapi && make && make install
+    rm -r /tmp/hark-fd
 }
 
 install_other_deps() {
@@ -304,6 +374,12 @@ install_other_deps() {
 
     # For window layout
     $SUDO apt-get ${APT_GET_OPTS} install xdotool
+
+    # For audio lip sync
+    install_pocketsphinx
+
+    # For audio localization
+    install_hark
 
     info "Installing other dependencies is done"
 }
