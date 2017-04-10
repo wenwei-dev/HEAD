@@ -10,12 +10,13 @@ BASEDIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
 
 ############# Configurations #############
 HR_VERSION=0.1.2
-HRTOOL_VERSION=0.1.7
+HRTOOL_VERSION=0.1.8
 
 OPENCOG_REPOS=(cogutils atomspace opencog ros-behavior-scripting relex external-tools)
 HR_REPOS=(HEAD)
 GITHUB_STORAGE_URL=https://raw.githubusercontent.com/hansonrobotics/binary_dependency/master
 GITHUB_HRCOMP_URL=https://raw.githubusercontent.com/hansonrobotics/HEAD/master/scripts/hr/hr-completion.bash
+GITHUB_HR_URL=https://raw.githubusercontent.com/hansonrobotics/HEAD/master/scripts/hr
 GITHUB_HR_EXT_URL=https://$GITHUB_TOKEN@raw.githubusercontent.com/hansonrobotics/private_ws/master/scripts/_hr
 declare -A MD5SUMS
 
@@ -143,25 +144,31 @@ vercomp() {
 _update_version() {
     k=$1
     v=$2
-    if ! grep -E "$k=.*" $HR_VERSION_FILE >/dev/null 2>&1; then
-        echo "$k=$v" >> $HR_VERSION_FILE
+    if ! grep -E "$k==.*" $HR_VERSION_FILE >/dev/null 2>&1; then
+        echo "$k==$v" >> $HR_VERSION_FILE
     else
-        sed -i "s/$k=.*/$k=$v/" $HR_VERSION_FILE
+        sed -i "s/$k==.*/$k==$v/" $HR_VERSION_FILE
     fi
 }
 
 _print_version() {
     k=$1
-    if grep -E "$k=.*" $HR_VERSION_FILE >/dev/null 2>&1; then
-        ver=$(grep -E "$k=.*" $HR_VERSION_FILE)
+    if grep -E "$k==.*" $HR_VERSION_FILE >/dev/null 2>&1; then
+        ver=$(grep -E "$k==.*" $HR_VERSION_FILE|awk -F== '{print $2}')
         echo $ver
     fi
 }
 
 _remove_version() {
     k=$1
-    if grep -E "$k=.*" $HR_VERSION_FILE >/dev/null 2>&1; then
-        sed -i "/^${k}=/d" $HR_VERSION_FILE
+    v=$2
+    if [[ -z $v ]]; then
+        sed -i "/^${k}==/d" $HR_VERSION_FILE
+    else
+        sed -i "/^${k}==${v}/d" $HR_VERSION_FILE
+    fi
+}
+
     fi
 }
 
@@ -612,14 +619,7 @@ hr_env() {
 }
 
 hr_version() {
-    hrver=$(_print_version hr|cut -d= -f2)
-    if [[ ! -z $hrver ]]; then
-        echo "HR Tool Version ${hrver}"
-    fi
-    hrextver=$(_print_version hr-ext|cut -d= -f2)
-    if [[ ! -z $hrextver ]]; then
-        echo "HR Tool Extension Version ${hrextver}"
-    fi
+    cat $HR_VERSION_FILE
     echo ""
     print_repo_info
 }
@@ -1190,7 +1190,7 @@ _install_hr-ext() {
 }
 
 install_hr_msgs() {
-    local installed_ver=$(_print_version hr_msgs|cut -d= -f2)
+    local installed_ver=$(hr cmd _print_version hr_msgs)
     if [[ ! -z $installed_ver ]]; then
         warn "hr_msgs==${installed_ver} is already installed"
         return
@@ -1288,29 +1288,25 @@ update_opencog() {
 }
 
 update_hr() {
-    local url=https://raw.githubusercontent.com/hansonrobotics/HEAD/master/scripts/hr/hr
     local file=/tmp/hr
-    curl -sLo $file ${url}
-    bash_flag=$(file $file | grep bash | wc -l)
-    if [[ $bash_flag != "1" ]]; then
+    if ! curl --fail -sLo $file ${GITHUB_HR_URL}/hr; then
         error "Can't get hr"
         exit 1
     fi
-    chmod +x /tmp/hr
-    installed_hrver=$(_print_version hr|cut -d= -f2)
+    local installed_hrver=$(hr cmd _print_version hr)
     if [[ -z ${installed_hrver} ]]; then
         ASSUME_YES=1 hr uninstall hr
-        /tmp/hr install hr
+        bash $file install hr
     else
         local compare=$(vercomp $installed_hrver $HRTOOL_VERSION)
         if [[ $compare != 1 ]]; then
             ASSUME_YES=1 hr uninstall hr
-            /tmp/hr install hr
+            bash $file install hr
         else
             error "Can't Update to older version"
         fi
     fi
-    rm -f /tmp/hr
+    rm -f $file
 }
 
 help_update() {
