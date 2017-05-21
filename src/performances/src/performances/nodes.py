@@ -55,7 +55,7 @@ class Node(object):
 
     def __init__(self, data, runner):
         self.data = data
-        self.duration = min(0.1, float(data['duration']))
+        self.duration = max(0.1, float(data['duration']))
         self.start_time = data['start_time']
         self.started = False
         self.started_at = 0
@@ -227,7 +227,7 @@ class expression(Node):
 
     def start(self, run_time):
         try:
-            self.runner.services['head_pau_mux']("/" + self.runner.robot_name + "/no_pau")
+            self.runner.services['eyes_pau_mux']("/" + self.runner.robot_name + "/eyes_tracking_pau")
             logger.info("Call head_pau_mux topic {}".format("/" + self.runner.robot_name + "/no_pau"))
         except Exception as ex:
             logger.error(ex)
@@ -243,12 +243,9 @@ class expression(Node):
 
     def stop(self, run_time):
         try:
-            self.runner.topics['expression'].publish(
-                MakeFaceExpr('Neutral', self._magnitude(self.data['magnitude'])))
-            time.sleep(self.duration)
-            logger.info("Neutral expression")
-            self.runner.services['head_pau_mux']("/blender_api/get_pau")
-            logger.info("Call head_pau_mux topic {}".format("/blender_api/get_pau"))
+            # self.runner.topics['expression'].publish(
+            #     MakeFaceExpr('Neutral', self._magnitude(self.data['magnitude'])))
+            Timer(0.1, lambda: self.runner.services['eyes_pau_mux']("/" + self.runner.robot_name + "/head_pau")).start()
         except Exception as ex:
             logger.error(ex)
 
