@@ -14,3 +14,11 @@ col=len(header.split(','))
 print col
 data = np.random.rand(samples, col)
 np.savetxt('pau_values_random.csv', data, delimiter=',', header=header, comments='')
+
+
+data = np.zeros((100, col))
+ind = header.split(',').index('brow_center_UP')
+data[:, ind] = np.linspace(0, 1, 100)
+ind = header.split(',').index('brow_center_DN')
+data[:, ind] = np.linspace(1, 0, 100)
+np.savetxt('test_pau_values.csv', data, delimiter=',', header=header, comments='')
